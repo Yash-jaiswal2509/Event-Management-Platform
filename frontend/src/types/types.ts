@@ -9,7 +9,6 @@ export interface LoginResponse {
   success: boolean;
   data: {
     user: User;
-    token: string;
   };
 }
 

@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState, ReactNode } from 'react
 import { useNavigate } from 'react-router-dom';
 import { AuthContextType, VerifyTokenResponse } from '../types/types';
 import axios from 'axios';
-import LoadingScreen from "@/components/ui/LoadingScreen";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const AuthContext = createContext<AuthContextType | null>(null);
 const backendUrl = import.meta.env.VITE_BACKEND_URL;

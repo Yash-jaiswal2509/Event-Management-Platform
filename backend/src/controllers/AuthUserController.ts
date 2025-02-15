@@ -62,7 +62,6 @@ class AuthUserController {
             username: user.username,
             email: user.email,
           },
-          token,
         },
       });
     } catch (error) {
@@ -196,7 +195,6 @@ class AuthUserController {
             email: user.email,
             isGuest: user.isGuest
           },
-          token,
         },
       });
     } catch (error) {

@@ -39,7 +39,9 @@ export function RegisterForm() {
             return response.data
         },
         onSuccess: () => {
-            toast.success('Account created successfully')
+            toast.success('Account created successfully');
+            form.reset();
+            navigate('/login');
         },
         onError: (error) => {
             toast.error(error instanceof Error ? error.message : "Something went wrong")
