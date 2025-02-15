@@ -11,5 +11,7 @@ router.get("/users", protect, AuthUserController.getAllUsers);
 router.get("/users/:id", protect, AuthUserController.getUserById);
 router.put("/users/:id", protect, AuthUserController.updateUser);
 router.delete("/users/:id", protect, AuthUserController.deleteUser);
+router.post("/guest-login", AuthUserController.guestLogin);
+router.get("/verify-token", protect, AuthUserController.verifyToken);
 
 export default router;

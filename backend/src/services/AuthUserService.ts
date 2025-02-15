@@ -46,6 +46,20 @@ class AuthUserService {
   async delete(id: string): Promise<IUser | null> {
     return await AuthUserRepository.delete(id);
   }
+
+  async guestLogin(): Promise<{ user: IUser; token: string }> {
+    const guestUser = {
+      username: 'Guest User',
+      email: `guest_${Date.now()}@example.com`,
+      password: 'guest123',
+      isGuest: true
+    };
+
+    const user = await AuthUserRepository.createUser(guestUser);
+    const token = generateToken(user._id.toString());
+
+    return { user, token };
+  }
 }
 
 export default new AuthUserService();

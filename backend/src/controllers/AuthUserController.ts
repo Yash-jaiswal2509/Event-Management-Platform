@@ -2,6 +2,7 @@
 
 import { Request, Response } from "express";
 import AuthUserService from "../services/AuthUserService";
+import { AuthRequest } from "../middleware/auhtMiddleware";
 
 class AuthUserController {
   // Register
@@ -167,16 +168,64 @@ class AuthUserController {
 
   // Logout
   async logout(req: Request, res: Response): Promise<void> {
+    res.clearCookie("token");
+    res.status(200).json({
+      success: true,
+      message: "Logged out successfully"
+    });
+  }
+
+  // Guest login
+  async guestLogin(req: Request, res: Response): Promise<void> {
     try {
-      res.clearCookie("token");
+      const { user, token } = await AuthUserService.guestLogin();
+
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 24 * 60 * 60 * 1000,
+      });
+
       res.status(200).json({
         success: true,
-        message: "Logged out successfully",
+        data: {
+          user: {
+            id: user._id,
+            username: user.username,
+            email: user.email,
+            isGuest: user.isGuest
+          },
+          token,
+        },
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        error: error instanceof Error ? error.message : "Failed to logout",
+        error: error instanceof Error ? error.message : "Guest login failed",
+      });
+    }
+  }
+
+  // Verify token
+  async verifyToken(req: AuthRequest, res: Response): Promise<void> {
+    try {
+      const user = req.user;
+      res.status(200).json({
+        success: true,
+        data: {
+          user: {
+            id: user?._id,
+            username: user?.username,
+            email: user?.email,
+            isGuest: user?.isGuest
+          }
+        }
+      });
+    } catch (error) {
+      res.status(401).json({
+        success: false,
+        error: error instanceof Error ? error.message : "Token verification failed"
       });
     }
   }
